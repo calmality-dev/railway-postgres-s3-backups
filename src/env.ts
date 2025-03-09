@@ -52,4 +52,19 @@ export const env = envsafe({
     default: '',
     allowEmpty: true,
   }),
+  PRE_NOTIFICATION_URL: str({
+    desc: 'URL to call when backup begins',
+    default: '',
+    allowEmpty: true,
+  }),
+  ERROR_NOTIFICATION_URL: str({
+    desc: 'URL to call when backup fails',
+    default: '',
+    allowEmpty: true,
+  }),
+  SUCCESS_NOTIFICATION_URL: str({
+    desc: 'URL to call when backup succeeds',
+    default: '',
+    allowEmpty: true,
+  }),
 })

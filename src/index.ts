@@ -4,11 +4,34 @@ import { env } from "./env.js";
 
 console.log("NodeJS Version: " + process.version);
 
+const sendNotification = async (envKey: keyof typeof env) => {
+  if (!env[envKey]) {
+    return;
+  }
+
+  if (typeof env[envKey] !== 'string') {
+    return;
+  }
+
+  try {
+    await fetch(env[envKey]);
+  } catch (error) {
+    console.error(`Error while calling ${envKey} url`, error)
+  }
+}
+
 const tryBackup = async () => {
   try {
+    await sendNotification('PRE_NOTIFICATION_URL');
+
     await backup();
+    
+    await sendNotification('SUCCESS_NOTIFICATION_URL');
   } catch (error) {
     console.error("Error while running backup: ", error);
+
+    await sendNotification('ERROR_NOTIFICATION_URL');
+
     process.exit(1);
   }
 }
