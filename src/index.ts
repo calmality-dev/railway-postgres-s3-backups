@@ -15,7 +15,7 @@ const sendNotification = async (envKey: keyof typeof env) => {
 
   try {
     console.log(`Sending notification to ${envKey}`);
-    await fetch(env[envKey]);
+    await fetch(env[envKey] as string);
   } catch (error) {
     console.error(`Error while calling ${envKey} url`, error)
   }
