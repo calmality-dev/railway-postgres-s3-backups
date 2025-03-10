@@ -9,33 +9,36 @@ const sendNotification = async (envKey: keyof typeof env) => {
     return;
   }
 
-  if (typeof env[envKey] !== 'string') {
+  if (typeof env[envKey] !== "string") {
     return;
   }
 
   try {
     console.log(`Sending notification to ${envKey}`);
-    await fetch(env[envKey] as string);
+    const res = await fetch(env[envKey] as string);
+    if (!res.ok) {
+      console.error(`Received ${res.status} from ${envKey} url`);
+    }
   } catch (error) {
-    console.error(`Error while calling ${envKey} url`, error)
+    console.error(`Error while calling ${envKey} url`, error);
   }
-}
+};
 
 const tryBackup = async () => {
   try {
-    await sendNotification('PRE_NOTIFICATION_URL');
+    await sendNotification("PRE_NOTIFICATION_URL");
 
     await backup();
-    
-    await sendNotification('SUCCESS_NOTIFICATION_URL');
+
+    await sendNotification("SUCCESS_NOTIFICATION_URL");
   } catch (error) {
     console.error("Error while running backup: ", error);
 
-    await sendNotification('ERROR_NOTIFICATION_URL');
+    await sendNotification("ERROR_NOTIFICATION_URL");
 
     process.exit(1);
   }
-}
+};
 
 if (env.RUN_ON_STARTUP || env.SINGLE_SHOT_MODE) {
   console.log("Running on start backup...");
